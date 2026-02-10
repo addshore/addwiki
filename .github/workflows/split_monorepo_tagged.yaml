@@ -39,7 +39,7 @@ jobs:
             -
                 # Uses an action in the root directory
                 name: Monorepo Split of ${{ matrix.package }}
-                uses: symplify/github-action-monorepo-split@v2.3.0
+                uses: symplify/github-action-monorepo-split@v2.4.4
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 with:
