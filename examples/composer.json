@@ -17,11 +17,6 @@
         "guzzlehttp/guzzle": "^6.5",
         "guzzlehttp/promises": "^1.5"
     },
-    "autoload": {
-        "psr-4": {
-            "Addwiki\\Examples\\MediawikiCheck\\": "src/"
-        }
-    },
     "config": {
         "audit": {
             "block-insecure": false

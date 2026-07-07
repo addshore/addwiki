@@ -20,7 +20,6 @@ jobs:
                     - mediawiki-api
                     - mediawiki-api-base
                     - mediawiki-datamodel
-                    - mediawiki-flow-api
                     - mediawiki-sitematrix-api
                     - wikibase-api
                     - wikibase-datamodel

@@ -54,12 +54,6 @@ gh api --method PATCH repos/addwiki/mediawiki-sitematrix-api \
     --field has_issues='false'\
     --field has_projects='false'\
     --field has_wiki='false'
-gh api --method PATCH repos/addwiki/mediawiki-flow-api \
-    --field description='Library for interacting with the Flow extension, [READ-ONLY] split from https://github.com/addwiki/addwiki'\
-    --field homepage='https://addwiki.github.io/'\
-    --field has_issues='false'\
-    --field has_projects='false'\
-    --field has_wiki='false'
 # CLI stuff
 gh api --method PATCH repos/addwiki/addwiki-cli \
     --field description='PHP CLI tool making use of the addwiki libraries and services, [READ-ONLY] split from https://github.com/addwiki/addwiki'\
