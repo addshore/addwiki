@@ -25,6 +25,8 @@ class OAuthOwnerConsumer implements AuthMethod {
 
 	private string $accessSecret;
 
+	private ?string $userAgentIdentifier = null;
+
 	public function __construct( string $consumerKey, string $consumerSecret, string $accessToken, string $accessSecret ) {
 		if ( empty( $consumerKey ) || empty( $consumerSecret ) || empty( $accessToken ) || empty( $accessSecret ) ) {
 			throw new InvalidArgumentException( 'No empty fields allowed' );
@@ -82,7 +84,14 @@ class OAuthOwnerConsumer implements AuthMethod {
 	}
 
 	public function identifierForUserAgent(): ?string {
+		if ( $this->userAgentIdentifier !== null ) {
+			return $this->userAgentIdentifier;
+		}
 		return 'oauth-consumer/' . $this->getConsumerKey();
+	}
+
+	public function setIdentifierForUserAgent( string $identifier ): void {
+		$this->userAgentIdentifier = $identifier;
 	}
 
 }

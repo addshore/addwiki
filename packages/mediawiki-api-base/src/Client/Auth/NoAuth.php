@@ -12,6 +12,8 @@ use Addwiki\Mediawiki\Api\Client\Request\Requester;
  */
 class NoAuth implements AuthMethod {
 
+	private ?string $userAgentIdentifier = null;
+
 	public function preRequestAuth( Request $request, Requester $requester ): Request {
 		// Verify that the user is logged in if set to user, not logged in if set to anon, or has the bot user right if bot.
 		$request->setParam( 'assert', 'anon' );
@@ -19,7 +21,11 @@ class NoAuth implements AuthMethod {
 	}
 
 	public function identifierForUserAgent(): ?string {
-		return null;
+		return $this->userAgentIdentifier;
+	}
+
+	public function setIdentifierForUserAgent( string $identifier ): void {
+		$this->userAgentIdentifier = $identifier;
 	}
 
 }

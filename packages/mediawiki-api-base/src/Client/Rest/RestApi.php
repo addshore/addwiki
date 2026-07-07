@@ -197,14 +197,10 @@ class RestApi implements Requester, LoggerAwareInterface {
 	}
 
 	private function getUserAgent(): string {
-		if ( !$this->auth instanceof NoAuth ) {
-			if ( $this->auth instanceof UserAndPassword || $this->auth instanceof UserAndPasswordWithDomain ) {
-				return 'addwiki-mediawiki-client/' . $this->auth->getUsername();
-			}
-
-			return 'addwiki-mediawiki-client/SomeUnknownUser?';
+		$identifier = $this->auth->identifierForUserAgent();
+		if ( $identifier !== null ) {
+			return 'addwiki-mediawiki-client/' . $identifier;
 		}
-
 		return 'addwiki-mediawiki-client';
 	}
 

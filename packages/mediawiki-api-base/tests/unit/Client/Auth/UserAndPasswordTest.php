@@ -84,7 +84,7 @@ class UserAndPasswordTest extends TestCase {
 	private function getExpectedRequestOpts( $params, $paramsLocation ): array {
 		return [
 			$paramsLocation => array_merge( $params, [ 'format' => 'json' ] ),
-			'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client/U1' ],
+			'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client/user/U1' ],
 		];
 	}
 
@@ -143,6 +143,32 @@ class UserAndPasswordTest extends TestCase {
 		$api = new ActionApi( '', $auth, $client );
 		$this->expectException( UsageException::class );
 		$auth->preRequestAuth( ActionRequest::simpleGet( 'dummyrequest' ), $api );
+	}
+
+	public function testCustomIdentifierForUserAgent(): void {
+		$client = $this->createMock( ClientInterface::class );
+		$client->expects( $this->once() )
+			->method( 'request' )
+			->with(
+				'GET',
+				null,
+				[
+					'query' => [ 'action' => 'dummyrequest', 'format' => 'json', 'assert' => 'user' ],
+					'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client/CustomID' ],
+				]
+			)
+			->willReturn( $this->getMockResponse( [] ) );
+
+		$auth = new UserAndPassword( 'U1', 'P1' );
+		$auth->setIdentifierForUserAgent( 'CustomID' );
+		// Fake being logged in so we don't have to deal with the login sequence here
+		$reflection = new \ReflectionClass( $auth );
+		$property = $reflection->getProperty( 'isLoggedIn' );
+		$property->setAccessible( true );
+		$property->setValue( $auth, true );
+
+		$api = new ActionApi( '', $auth, $client );
+		$api->request( ActionRequest::simpleGet( 'dummyrequest' ) );
 	}
 
 }

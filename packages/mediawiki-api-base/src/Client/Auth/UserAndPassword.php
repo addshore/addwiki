@@ -20,6 +20,8 @@ class UserAndPassword implements AuthMethod {
 
 	private string $username;
 
+	private ?string $userAgentIdentifier = null;
+
 	private bool $isLoggedIn = false;
 
 	private $assertType = 'user';
@@ -116,7 +118,14 @@ class UserAndPassword implements AuthMethod {
 	}
 
 	public function identifierForUserAgent(): ?string {
+		if ( $this->userAgentIdentifier !== null ) {
+			return $this->userAgentIdentifier;
+		}
 		return 'user/' . $this->getUsername();
+	}
+
+	public function setIdentifierForUserAgent( string $identifier ): void {
+		$this->userAgentIdentifier = $identifier;
 	}
 
 }
