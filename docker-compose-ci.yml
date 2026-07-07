@@ -2,7 +2,6 @@
 #
 # Access via "http://localhost:8877"
 #   (or "http://$(docker-machine ip):8877" if using docker-machine)
-version: '3'
 
 services:
   mediawiki:
