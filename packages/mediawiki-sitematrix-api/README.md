@@ -6,7 +6,9 @@
 
 Install the unified toolkit package:
 
-    composer require addwiki/addwiki
+```sh
+composer require addwiki/addwiki
+```
 
 This module lives in `packages/mediawiki-sitematrix-api` and is autoloaded via the root package.
 

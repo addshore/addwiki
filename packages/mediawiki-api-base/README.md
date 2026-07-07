@@ -30,22 +30,3 @@ $purgeRequest = FluentRequest::factory()->setAction( 'purge' )->setParam( 'title
 $api->postRequest( $purgeRequest );
 ```
 
-## Integration tests
-
-Run the MediaWiki test site:
-
-```sh
-docker compose -f docker-compose-ci.yml up -d
-```
-
-Run the tests:
-
-```sh
-composer phpunit-integration
-```
-
-Destroy the site that was used for testing:
-
-```sh
-docker compose -f docker-compose-ci.yml down --volumes
-```

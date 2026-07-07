@@ -6,6 +6,8 @@ Issue tracker: https://github.com/addwiki/addwiki/issues
 
 Install the unified toolkit package:
 
-	composer require addwiki/addwiki
+```sh
+composer require addwiki/addwiki
+```
 
 This module lives in `packages/wikimedia` and is autoloaded via the root package.

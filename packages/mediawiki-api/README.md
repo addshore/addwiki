@@ -6,7 +6,9 @@
 
 Install the unified toolkit package:
 
-	composer require addwiki/addwiki
+```sh
+composer require addwiki/addwiki
+```
 
 This module lives in `packages/mediawiki-api` and is autoloaded via the root package.
 
@@ -52,16 +54,3 @@ $services->newRevisionSaver()->save( $revision );
 $pages = $services->newPageListGetter()->getPageListFromCategoryName( 'Category:Cat name' );
 ```
 
-## Running the integration tests
-
-To run the integration tests, you need to have a running MediaWiki instance. The tests will create pages and categories without using a user account so it's best if you use a test instance. Furthermore you need to turn off rate limiting by adding the line
-
-   $wgGroupPermissions['*']['noratelimit'] = true;
-
-to the `LocalSettings.php` of your MediaWiki.
-
-By default, the tests will use the URL `http://localhost/w/api.php` as the API endpoint. If you have a different URL (e.g. `http://localhost:8080/w/api.php`), you need to configure the URL as an environment variable before running the tests. Example:
-
-    export MEDIAWIKI_API_URL='http://localhost:8080/w/api.php'
-
-**Warning:** Running the integration tests can take a long time to complete.

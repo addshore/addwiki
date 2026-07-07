@@ -23,7 +23,7 @@ php check.php https://www.mediawiki.org/
 - Prints `NOT_OK` and exits with code `1` otherwise.
 
 ## Detection strategy
-The script uses `MediaWiki::newFromPage(...)` from `addwiki/mediawiki-api-base`,
+The script uses `MediaWiki::newFromPage(...)` from `addwiki/addwiki`,
 then calls `action()->getVersion()`. If that succeeds, it prints `OK`.
 */
 

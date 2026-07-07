@@ -12,7 +12,9 @@ There are probably not many use cases where you would want to use this module di
 
 Install the unified toolkit package:
 
-    composer require addwiki/addwiki
+```sh
+composer require addwiki/addwiki
+```
 
 This module lives in `packages/wikibase-datamodel` and is autoloaded via the root package.
 
@@ -24,8 +26,8 @@ require_once( __DIR__ . '/vendor/autoload.php' );
 
 ## External Libraries
 
-Some code, such as `MediaInfo` realted code is pulled in from MediaWiki extensions and can be found in the `/lib` directory.
-This is because this code is not availible as a library, but there is little point in rewriting it...
+Some code, such as `MediaInfo` related code is pulled in from MediaWiki extensions and can be found in the `/lib` directory.
+This is because this code is not available as a library, but there is little point in rewriting it...
 
 This code can be updated using the `sync-copied-files` composer command.
 
