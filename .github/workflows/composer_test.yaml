@@ -60,10 +60,26 @@ jobs:
                     composer-options: "--ignore-platform-req php"
 
             -   name: Run CI docker compose if present
-                run: '(test -f docker-compose-ci.yml && docker compose --file docker-compose-ci.yml up -d) || echo No docker-compose-ci.yml, skipping step'
+                run: |
+                    if [ -f docker-compose-ci.yml ]; then
+                        docker compose --file docker-compose-ci.yml up -d --wait --wait-timeout 180
+                    else
+                        echo "No docker-compose-ci.yml, skipping step"
+                    fi
 
-            -   name: Wait for docker compose to be ready (if needed)
-                run: '(test -f build/docker-compose-ci-wait.sh && build/docker-compose-ci-wait.sh) || echo No docker-compose-ci-wait.sh, not waiting'
+            -   name: Bootstrap MediaWiki test wiki
+                run: |
+                    if [ -f build/docker-compose-ci-bootstrap.sh ]; then
+                        bash build/docker-compose-ci-bootstrap.sh
+                    else
+                        echo "No docker-compose-ci-bootstrap.sh, skipping step"
+                    fi
 
             -   name: Run integration tests
                 run: composer phpunit-integration
+
+            -   name: Dump docker diagnostics on failure
+                if: failure()
+                run: |
+                    docker compose --file docker-compose-ci.yml ps
+                    docker compose --file docker-compose-ci.yml logs --no-color --tail=400 mediawiki database

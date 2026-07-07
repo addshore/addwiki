@@ -4,19 +4,27 @@ RUN apt-get update && \
     apt-get install --yes --no-install-recommends unzip=6.* jq=1.* curl=7.* ca-certificates=202* && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN curl -fsSL https://getcomposer.org/installer -o composer-setup.php && \
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+    rm composer-setup.php
+
 ADD ./.docker/download-extension.sh /
 ADD https://raw.githubusercontent.com/wmde/wikibase-docker/262ffef7cc550381309c360e3e92507e85cd8bf6/wikibase/1.35/base/wait-for-it.sh /
 ADD build/ /
 
 RUN chmod +x /*.sh
 
-RUN bash /download-extension.sh OAuth REL1_39;\
-tar xzf OAuth.tar.gz;\
-mv OAuth /var/www/html/extensions/OAuth
+RUN bash /download-extension.sh OAuth REL1_39 && \
+    mkdir -p /var/www/html/extensions/OAuth && \
+    tar xzf OAuth.tar.gz -C /var/www/html/extensions/OAuth && \
+    if [ -d /var/www/html/extensions/OAuth/OAuth ]; then cp -a /var/www/html/extensions/OAuth/OAuth/. /var/www/html/extensions/OAuth/ && rm -rf /var/www/html/extensions/OAuth/OAuth; fi && \
+    if [ -f /var/www/html/extensions/OAuth/composer.json ] && [ ! -f /var/www/html/extensions/OAuth/vendor/autoload.php ]; then COMPOSER_ALLOW_SUPERUSER=1 composer install --working-dir=/var/www/html/extensions/OAuth --no-interaction --no-dev --prefer-dist --ignore-platform-reqs --no-security-blocking; fi
 
-RUN bash /download-extension.sh Wikibase REL1_39;\
-tar xzf Wikibase.tar.gz;\
-mv Wikibase /var/www/html/extensions/Wikibase
+RUN bash /download-extension.sh Wikibase REL1_39 && \
+    mkdir -p /var/www/html/extensions/Wikibase && \
+    tar xzf Wikibase.tar.gz -C /var/www/html/extensions/Wikibase && \
+    if [ -d /var/www/html/extensions/Wikibase/Wikibase ]; then cp -a /var/www/html/extensions/Wikibase/Wikibase/. /var/www/html/extensions/Wikibase/ && rm -rf /var/www/html/extensions/Wikibase/Wikibase; fi && \
+    if [ -f /var/www/html/extensions/Wikibase/composer.json ] && [ ! -f /var/www/html/extensions/Wikibase/vendor/autoload.php ]; then COMPOSER_ALLOW_SUPERUSER=1 composer install --working-dir=/var/www/html/extensions/Wikibase --no-interaction --no-dev --prefer-dist --ignore-platform-reqs --no-security-blocking; fi
 
 # Hack so we can add a owner only oauth consumer
 # https://gist.github.com/addshore/6b148942305b98251cd35203459feb7c

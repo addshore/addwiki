@@ -13,6 +13,9 @@ if [ ! -f entrypoint-done.txt ]; then
     php maintenance/install.php --server="http://localhost:8877" --scriptpath= --dbtype mysql --dbuser $MYSQL_USER --dbpass $MYSQL_PASSWORD --dbserver $MYSQL_SERVER --lang en --dbname $MYSQL_DATABASE --pass LongCIPass123 SiteName CIUser
 
     # Settings for extensions
+    echo "\$wgServer = 'http://localhost:8877';" >> LocalSettings.php
+    echo "\$wgCanonicalServer = 'http://localhost:8877';" >> LocalSettings.php
+    echo "\$wgScriptPath = '';" >> LocalSettings.php
     echo "wfLoadExtension( 'OAuth' );" >> LocalSettings.php
     echo "\$wgGroupPermissions['sysop']['mwoauthproposeconsumer'] = true;" >> LocalSettings.php
     echo "\$wgGroupPermissions['sysop']['mwoauthmanageconsumer'] = true;" >> LocalSettings.php
@@ -35,9 +38,39 @@ if [ ! -f entrypoint-done.txt ]; then
     echo "\$wgWBRepoSettings['siteLinkGroups'] = [ 'default' ];" >> LocalSettings.php
     # Add an OAuth Consumer
     php maintenance/resetUserEmail.php --no-reset-password CIUser CIUser@addwiki.github.io
-    php extensions/OAuth/maintenance/addwikiAddOauth.php --approve --callbackUrl https://CiConsumerUrl \
-    --callbackIsPrefix true --user CIUser --name CIConsumer --description CIConsumer --version 1.1.0 \
-    --grants highvolume --jsonOnSuccess > createOAuthConsumer.json
+    rm -f createOAuthConsumer.json createOAuthConsumer.stderr.log
+    oauth_consumer_created=0
+    for i in 1 2 3
+    do
+        CONSUMER_NAME="CIConsumer-${i}-$(date +%s%N)-$RANDOM"
+        if php extensions/OAuth/maintenance/addwikiAddOauth.php --approve --callbackUrl https://CiConsumerUrl \
+            --callbackIsPrefix true --user CIUser --name "$CONSUMER_NAME" --description CIConsumer --version 1.1.0 \
+            --grants highvolume --jsonOnSuccess > createOAuthConsumer.json 2> createOAuthConsumer.stderr.log && \
+            jq -e 'has("consumerKey") or has("key")' createOAuthConsumer.json > /dev/null
+        then
+            oauth_consumer_created=1
+            break
+        fi
+
+        echo "OAuth consumer creation attempt ${i} failed, retrying..."
+        sleep 1
+    done
+
+    if [ "$oauth_consumer_created" -ne 1 ]; then
+        echo "ERROR: Failed to create OAuth consumer JSON after 3 attempts" >&2
+        if [ -f createOAuthConsumer.json ]; then
+            echo "createOAuthConsumer.json contents:" >&2
+            cat createOAuthConsumer.json >&2
+        else
+            echo "createOAuthConsumer.json was not created" >&2
+        fi
+        if [ -f createOAuthConsumer.stderr.log ]; then
+            echo "OAuth consumer creation stderr:" >&2
+            cat createOAuthConsumer.stderr.log >&2
+        fi
+        exit 1
+    fi
+
     cat createOAuthConsumer.json
 
     # Hide depreaction warnings from MediaWiki output
