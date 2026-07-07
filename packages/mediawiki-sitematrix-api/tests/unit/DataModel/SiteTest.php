@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Ext\Sitematrix\Test\Integration\DataModel;
 
 use Addwiki\Mediawiki\Ext\Sitematrix\DataModel\Site;

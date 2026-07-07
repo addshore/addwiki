@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Client\Rest;
 
 use Addwiki\Mediawiki\Api\Client\Action\Tokens;
@@ -128,7 +130,7 @@ class RestApi implements Requester, LoggerAwareInterface {
 	 * @return mixed
 	 */
 	private function decodeResponse( ResponseInterface $response ) {
-		return json_decode( $response->getBody(), true );
+		return json_decode( (string)$response->getBody(), true );
 	}
 
 	/**

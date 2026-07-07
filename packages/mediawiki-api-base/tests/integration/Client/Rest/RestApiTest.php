@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Tests\Integration\Client\Rest;
 
 use Addwiki\Mediawiki\Api\Client\Rest\Request\RestRequest;

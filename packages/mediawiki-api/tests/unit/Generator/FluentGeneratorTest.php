@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Tests\Unit\Generator;
 
 use Addwiki\Mediawiki\Api\Generator\FluentGenerator;

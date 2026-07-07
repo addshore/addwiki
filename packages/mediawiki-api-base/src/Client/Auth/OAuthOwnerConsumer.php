@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Client\Auth;
 
 use Addwiki\Mediawiki\Api\Client\Request\Request;

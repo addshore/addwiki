@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Wikibase\Api\Lookup;
 
 use Wikibase\DataModel\Entity\EntityDocument;

@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Client\Action;
 
 use Addwiki\Mediawiki\Api\Client\Action\Exception\UsageException;
@@ -134,7 +136,7 @@ class ActionApi implements Requester, LoggerAwareInterface {
 	 * @throws UsageException
 	 */
 	private function decodeResponse( ResponseInterface $response ) {
-		$resultArray = json_decode( $response->getBody(), true );
+		$resultArray = json_decode( (string)$response->getBody(), true );
 
 		$this->logWarnings( $resultArray );
 		$this->throwUsageExceptions( $resultArray );

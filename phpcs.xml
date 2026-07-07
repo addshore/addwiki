@@ -30,9 +30,12 @@
 		<exclude-pattern>view/resources/templates\.php</exclude-pattern>
 	</rule>
 
+	<rule ref="Generic.PHP.RequireStrictTypes" />
+
 	<file>.</file>
 	<arg name="extensions" value="php,php5,inc"/>
 	<arg name="encoding" value="utf8"/>
 	<exclude-pattern>build/</exclude-pattern>
 	<exclude-pattern>vendor/</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
 </ruleset>

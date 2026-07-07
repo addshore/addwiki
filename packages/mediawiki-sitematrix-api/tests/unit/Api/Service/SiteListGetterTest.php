@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Ext\Sitematrix\Test\Integration\Api\Service;
 
 use Addwiki\Mediawiki\Api\Client\Action\ActionApi;

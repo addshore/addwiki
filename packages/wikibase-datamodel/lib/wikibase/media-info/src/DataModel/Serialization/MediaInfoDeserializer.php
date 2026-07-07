@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Wikibase\MediaInfo\DataModel\Serialization;
 
 use Deserializers\Deserializer;

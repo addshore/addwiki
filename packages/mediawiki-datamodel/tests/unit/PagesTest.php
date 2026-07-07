@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\DataModel\Tests\Unit;
 
 use Addwiki\Mediawiki\DataModel\Page;

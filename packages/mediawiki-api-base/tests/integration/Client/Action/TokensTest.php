@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Tests\Integration\Client\Action;
 
 use Addwiki\Mediawiki\Api\Tests\Integration\BaseTestEnvironment;

@@ -95,12 +95,14 @@
     "scripts": {
         "lint": "vendor/bin/parallel-lint packages --exclude vendor",
         "phpcs": "vendor/bin/phpcs -ps --runtime-set ignore_warnings_on_exit 1 --standard=phpcs.xml packages",
+        "strict-types": "vendor/bin/phpcs -ps --standard=phpcs.xml --sniffs=Generic.PHP.RequireStrictTypes .",
         "fix": "vendor/bin/phpcbf --standard=phpcs.xml packages",
         "phpunit": "vendor/bin/phpunit packages/*/tests",
         "phpunit-unit": "vendor/bin/phpunit packages/*/tests/unit",
         "phpunit-integration": "vendor/bin/phpunit packages/*/tests/integration",
         "test": [
             "@lint",
+            "@strict-types",
             "@phpcs",
             "@phpunit-unit"
         ],
