@@ -1,12 +1,15 @@
 # Examples
 
-This directory contains small, self-contained example projects.
+This directory contains small, self-contained example scripts.
 
-Each example has its own `composer.json` and can be run independently.
+This folder itself is a Composer project.
 
 - `check.php`: Check whether a given homepage URL appears to be a MediaWiki site.
+- `mediawiki-last-log.php`: Fetch one recent public log event from a MediaWiki API endpoint.
+- `wikidata-search-earth.php`: Search Wikidata entities (default term: `earth`) via `wbsearchentities`.
+- `wikidata-query-one.php`: Run one tiny SPARQL query against the Wikidata Query Service.
 
-This folder itself acts as a composer project.
+## Setup
 
 Install dependencies:
 
@@ -14,9 +17,11 @@ Install dependencies:
 composer install
 ```
 
-And run an example, such as `check.php`:
+## Run
 
-```
 ```sh
 php check.php
+php mediawiki-first-log.php
+php wikidata-search-earth.php
+php wikidata-query-one.php
 ```

@@ -11,6 +11,9 @@
     "require": {
         "php": ">=8.1",
         "addwiki/mediawiki-api-base": "dev-main",
+        "addwiki/mediawiki-api": "dev-main",
+        "addwiki/wikibase-api": "dev-main",
+        "addwiki/wikibase-query": "dev-main",
         "guzzlehttp/guzzle": "^6.5",
         "guzzlehttp/promises": "^1.5"
     },
