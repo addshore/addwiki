@@ -2,7 +2,7 @@
 
 Addwiki is a collection of PHP libraries, packages and applications created for interacting with MediaWiki, Wikibase, Wikimedia and more.
 
-To dive in take a look at the [docs site](https://addwiki.github.io/).
+To get started quickly, run the local scripts in `examples/`.
 
 If you want to submit code patches to any of the repositories, then this is the place to look!
 

@@ -11,14 +11,14 @@ require_once __DIR__ . '/vendor/autoload.php';
 Get one recent public log event from a MediaWiki site.
 
 Default API endpoint:
-- https://en.wikipedia.org/w/api.php
+- https://www.mediawiki.org/w/api.php
 
 Usage:
-php mediawiki-first-log.php
-php mediawiki-first-log.php https://www.mediawiki.org/w/api.php
+php mediawiki-last-log.php
+php mediawiki-last-log.php https://www.mediawiki.org/w/api.php
 */
 
-$apiUrl = $argv[1] ?? 'https://en.wikipedia.org/w/api.php';
+$apiUrl = $argv[1] ?? 'https://www.mediawiki.org/w/api.php';
 
 try {
 	$api = new ActionApi( $apiUrl );

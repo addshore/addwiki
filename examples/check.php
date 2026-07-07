@@ -10,7 +10,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 Checks whether a given homepage URL looks like a MediaWiki site.
 
 Default URL:
-- `https://en.wikipedia.org/`
+- `https://www.mediawiki.org/`
 
 ## Example usage
 ```sh
@@ -27,7 +27,7 @@ The script uses `MediaWiki::newFromPage(...)` from `addwiki/mediawiki-api-base`,
 then calls `action()->getVersion()`. If that succeeds, it prints `OK`.
 */
 
-$homepage = $argv[1] ?? 'https://en.wikipedia.org/';
+$homepage = $argv[1] ?? 'https://www.mediawiki.org/';
 
 try {
 	MediaWiki::newFromPage( $homepage )->action()->getVersion();
