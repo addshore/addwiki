@@ -1,14 +1,14 @@
 # mediawiki-api
 
 [![GitHub issue custom search in repo](https://img.shields.io/github/issues-search/addwiki/addwiki?label=issues&query=is%3Aissue%20is%3Aopen%20%5Bmediawiki-api%5D)](https://github.com/addwiki/addwiki/issues?q=is%3Aissue+is%3Aopen+%5Bmediawiki-api%5D+)
-[![Latest Stable Version](https://poser.pugx.org/addwiki/mediawiki-api/version.png)](https://packagist.org/packages/addwiki/mediawiki-api)
-[![Download count](https://poser.pugx.org/addwiki/mediawiki-api/d/total.png)](https://packagist.org/packages/addwiki/mediawiki-api)
 
 ## Installation
 
-Use composer to install the library and all its dependencies:
+Install the unified toolkit package:
 
-    composer require "addwiki/mediawiki-api:~3.0"
+	composer require addwiki/addwiki
+
+This module lives in `packages/mediawiki-api` and is autoloaded via the root package.
 
 ## Example Usage
 

@@ -1,4 +1,4 @@
-name: Validate monorepo
+name: Validate Composer manifests
 
 on:
     pull_request: null
@@ -9,7 +9,6 @@ on:
             - '*'
 
 env:
-    # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
     COMPOSER_ROOT_VERSION: "dev-main"
 
 jobs:
@@ -30,4 +29,8 @@ jobs:
                 with:
                     composer-options: "--ignore-platform-req php"
 
-            -   run: composer validate-monorepo
+            -   name: Validate root composer
+                run: composer validate --strict --no-check-publish
+
+            -   name: Validate examples composer
+                run: composer validate --strict --no-check-publish --working-dir examples

@@ -1,4 +1,4 @@
-name: Tests
+name: Unified package tests
 
 on:
     pull_request: null
@@ -13,7 +13,7 @@ env:
     COMPOSER_ROOT_VERSION: "dev-main"
 
 jobs:
-    tests:
+    unit_and_quality:
         runs-on: ubuntu-latest
 
         strategy:
@@ -21,7 +21,7 @@ jobs:
             matrix:
                 php: [8.1,8.2]
 
-        name: Test monorepo with PHP ${{ matrix.php }}
+        name: Quality + unit tests (PHP ${{ matrix.php }})
 
         steps:
             -   uses: actions/checkout@v4
@@ -38,10 +38,32 @@ jobs:
                 with:
                     composer-options: "--ignore-platform-req php"
 
+            -
+                run: composer test
+
+    integration:
+        runs-on: ubuntu-latest
+        name: Integration tests (PHP 8.2)
+
+        steps:
+            -   uses: actions/checkout@v4
+
+            -   uses: shivammathur/setup-php@v2
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                with:
+                    php-version: 8.2
+                    coverage: none
+
+            -   uses: "ramsey/composer-install@v3"
+                with:
+                    composer-options: "--ignore-platform-req php"
+
             -   name: Run CI docker compose if present
                 run: '(test -f docker-compose-ci.yml && docker compose --file docker-compose-ci.yml up -d) || echo No docker-compose-ci.yml, skipping step'
+
             -   name: Wait for docker compose to be ready (if needed)
                 run: '(test -f build/docker-compose-ci-wait.sh && build/docker-compose-ci-wait.sh) || echo No docker-compose-ci-wait.sh, not waiting'
 
-            -
-                run: composer test
+            -   name: Run integration tests
+                run: composer phpunit-integration

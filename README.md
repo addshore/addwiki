@@ -1,79 +1,53 @@
-# addwiki - monorepo
+# addwiki
 
-Addwiki is a collection of PHP libraries, packages and applications created for interacting with MediaWiki, Wikibase, Wikimedia and more.
+Addwiki is a unified PHP toolkit for interacting with MediaWiki, Wikibase, Wikimedia and related APIs.
 
 To get started quickly, run the local scripts in `examples/`.
 
-If you want to submit code patches to any of the repositories, then this is the place to look!
+This repository is now the canonical source and distribution package.
 
-## Packages
-
-All packages exist in the `/packages` directory.
-Every package also exists in its own read only git repository, can be used separately and is installable via composer.
-
-**Most popular:**
-
-- [mediawiki-api-base](https://github.com/addwiki/mediawiki-api-base)
-- [mediawiki-api](https://github.com/addwiki/mediawiki-api)
-- [wikibase-api](https://github.com/addwiki/wikibase-api)
-
-**Behind the scenes:**
-- [mediawiki-datamodel](https://github.com/addwiki/mediawiki-datamodel)
-- [wikibase-datamodel](https://github.com/addwiki/wikibase-datamodel)
-
-**Other WIP:**
-
-- [wikimedia](https://github.com/addwiki/wikimedia)
-- [mediawiki-sitematrix-api](https://github.com/addwiki/mediawiki-sitematrix-api)
-- [wikibase-query](https://github.com/addwiki/wikibase-query)
-
-## Using the monorepo
-
-### monorepo-builder
-
-This mono repo uses https://github.com/symplify/monorepo-builder
-
-This provides convenience scripts for a few things...
-
-Merge all composer.json files together with:
+Install with Composer:
 
 ```sh
-composer merge
+composer require addwiki/addwiki
 ```
 
-Bump the cross package dependency with:
+## Internal structure
 
-```sh
-vendor/bin/monorepo-builder bump-interdependency "<version here>"
-```
+Code is kept in internal package-style folders under `/packages` for separation of concerns, but distribution is done as a single Composer package: `addwiki/addwiki`.
 
-Validate your synchronization:
+**Most used namespaces:**
 
-```sh
-composer validate-monorepo
-```
+- `Addwiki\\Mediawiki\\Api`
+- `Addwiki\\Wikibase\\Api`
+- `Addwiki\\Wikibase\\Query`
+- `Addwiki\\Wikimedia`
 
-Keep your package aliases up to date (not yet working)
+## Development
 
-```sh
-vendor/bin/monorepo-builder package-alias
-```
+Run examples from the `examples/` directory.
 
 ### Testing & CI
 
-Github Actions exist to split out packages as well as run tests on them.
+Run the default local test workflow (lint + phpcs + unit tests):
 
-Commands exist in each of the packages to run individual tests.
+```sh
+composer run test
+```
 
-You can also run all tests from the main monorepo.
-
-Run lint on all packages:
+Run lint only:
 
 ```sh
 composer lint
 ```
 
-Run phpunit unit tests on a single package:
+Run static analysis separately:
+
+```sh
+composer psalm
+```
+
+Run phpunit tests on a single internal package:
 
 ```sh
 vendor/bin/phpunit packages/mediawiki-api-base/tests/unit

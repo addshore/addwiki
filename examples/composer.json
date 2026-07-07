@@ -1,21 +1,17 @@
 {
-    "name": "addwiki/example-mediawiki-check",
-    "description": "Example script that checks whether a homepage is MediaWiki",
+    "name": "addwiki/examples",
+    "description": "Runnable examples for the unified addwiki/addwiki package",
     "type": "project",
+    "license": "GPL-2.0-or-later",
     "repositories": [
         {
             "type": "path",
-            "url": "../packages/*"
+            "url": ".."
         }
     ],
     "require": {
         "php": ">=8.1",
-        "addwiki/mediawiki-api-base": "dev-main",
-        "addwiki/mediawiki-api": "dev-main",
-        "addwiki/wikibase-api": "dev-main",
-        "addwiki/wikibase-query": "dev-main",
-        "guzzlehttp/guzzle": "^6.5",
-        "guzzlehttp/promises": "^1.5"
+        "addwiki/addwiki": "dev-main"
     },
     "config": {
         "audit": {

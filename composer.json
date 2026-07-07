@@ -26,7 +26,7 @@
         "data-values/time": "~1.0",
         "ext-curl": "*",
         "guzzlehttp/guzzle": "~6.3||~7.0",
-        "guzzlehttp/promises": "~1.0",
+        "guzzlehttp/promises": "~1.0||^2.5",
         "linclark/microdata-php": "~2.0",
         "mediawiki/oauthclient": "^2.1",
         "php": ">=8.1",
@@ -60,17 +60,17 @@
     },
     "name": "addwiki/addwiki",
     "replace": {
-        "addwiki/mediawiki-api": "3.1.0",
-        "addwiki/mediawiki-api-base": "3.1.0",
-        "addwiki/mediawiki-datamodel": "3.1.0",
-        "addwiki/mediawiki-sitematrix-api": "3.1.0",
-        "addwiki/wikibase-api": "3.1.0",
-        "addwiki/wikibase-datamodel": "3.1.0",
-        "addwiki/wikibase-query": "3.1.0",
-        "addwiki/wikimedia": "3.1.0"
+        "addwiki/mediawiki-api": "self.version",
+        "addwiki/mediawiki-api-base": "self.version",
+        "addwiki/mediawiki-datamodel": "self.version",
+        "addwiki/mediawiki-sitematrix-api": "self.version",
+        "addwiki/wikibase-api": "self.version",
+        "addwiki/wikibase-datamodel": "self.version",
+        "addwiki/wikibase-query": "self.version",
+        "addwiki/wikimedia": "self.version"
     },
-    "type": "project",
-    "description": "Addwiki Monorepo",
+    "type": "library",
+    "description": "Unified PHP toolkit for MediaWiki, Wikibase and Wikimedia APIs",
     "keywords": [
         "Mediawiki"
     ],
@@ -89,42 +89,23 @@
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpunit/phpunit": "~9",
         "rector/rector": "^0.11.60",
-        "symplify/monorepo-builder": "11.2.20",
-        "vimeo/psalm": "^5.0",
-        "wikibase/media-info": "dev-master#d86d961a0eb0c28e9b5d8ce600c64a9dae973533"
+        "vimeo/psalm": "^6.0"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "packages/*"
-        },
-        {
-            "type": "vcs",
-            "url": "https://gerrit.wikimedia.org/r/mediawiki/extensions/WikibaseMediaInfo"
-        }
-    ],
     "scripts": {
-        "template": "bin/run-template cp template/phpcs.xml DIR/phpcs.xml --",
-        "lint": "bin/run-template vendor/bin/parallel-lint DIR --",
-        "phpcs": "bin/run-template vendor/bin/phpcs -ps --standard=DIR/phpcs.xml DIR --",
-        "fix": "bin/run-template vendor/bin/phpcbf --standard=DIR/phpcs.xml DIR --",
-        "phpunit": "bin/run-template vendor/bin/phpunit DIR/tests --",
-        "phpunit-unit": "bin/run-template vendor/bin/phpunit DIR/tests/unit --",
-        "phpunit-integration": "bin/run-template vendor/bin/phpunit DIR/tests/integration --",
+        "lint": "vendor/bin/parallel-lint packages --exclude vendor",
+        "phpcs": "vendor/bin/phpcs -ps --runtime-set ignore_warnings_on_exit 1 --standard=phpcs.xml packages",
+        "fix": "vendor/bin/phpcbf --standard=phpcs.xml packages",
+        "phpunit": "vendor/bin/phpunit packages/*/tests",
+        "phpunit-unit": "vendor/bin/phpunit packages/*/tests/unit",
+        "phpunit-integration": "vendor/bin/phpunit packages/*/tests/integration",
         "test": [
             "@lint",
             "@phpcs",
-            "@psalm",
-            "@phpunit"
+            "@phpunit-unit"
         ],
-        "merge": "vendor/bin/monorepo-builder merge --ansi",
-        "propagate": "vendor/bin/monorepo-builder propagate --ansi",
         "rector": "vendor/bin/rector process --dry-run --ansi",
-        "validate-monorepo": "vendor/bin/monorepo-builder validate --ansi",
         "psalm": "vendor/bin/psalm",
         "aww": "aww",
         "awwd": "echo Please run ./vendor/bin/awwd directly"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }

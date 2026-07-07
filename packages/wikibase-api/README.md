@@ -1,16 +1,16 @@
 # wikibase-api
 
 [![GitHub issue custom search in repo](https://img.shields.io/github/issues-search/addwiki/addwiki?label=issues&query=is%3Aissue%20is%3Aopen%20%5Bwikibase-api%5D)](https://github.com/addwiki/addwiki/issues?q=is%3Aissue+is%3Aopen+%5Bwikibase-api%5D+)
-[![Latest Stable Version](https://poser.pugx.org/addwiki/wikibase-api/version.png)](https://packagist.org/packages/addwiki/wikibase-api)
-[![Download count](https://poser.pugx.org/addwiki/wikibase-api/d/total.png)](https://packagist.org/packages/addwiki/wikibase-api)
 
 Issue tracker: https://github.com/addwiki/addwiki/issues
 
 ## Installation
 
-Use composer to install the library and all its dependencies:
+Install the unified toolkit package:
 
-    composer require "addwiki/wikibase-api:~3.0"
+    composer require addwiki/addwiki
+
+This module lives in `packages/wikibase-api` and is autoloaded via the root package.
 
 ## Example Usage
 
