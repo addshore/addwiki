@@ -41,6 +41,27 @@ jobs:
             -
                 run: composer test
 
+    examples:
+        runs-on: ubuntu-latest
+        name: Examples smoke test (PHP 8.5)
+
+        steps:
+            -   uses: actions/checkout@v4
+
+            -   uses: shivammathur/setup-php@v2
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                with:
+                    php-version: 8.5
+                    extensions: curl, dom, simplexml
+                    coverage: none
+
+            -   name: Install example dependencies
+                run: composer --working-dir=examples install --no-interaction --prefer-dist --ignore-platform-req php
+
+            -   name: Run examples
+                run: composer --working-dir=examples test
+
     integration:
         runs-on: ubuntu-latest
         name: Integration tests (PHP 8.5)

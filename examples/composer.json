@@ -13,6 +13,18 @@
         "php": ">=8.1",
         "addwiki/addwiki": "dev-main"
     },
+    "scripts": {
+        "test": [
+            "@php check.php",
+            "@php mediawiki-siteinfo.php",
+            "@php mediawiki-last-log.php",
+            "@php mediawiki-namespaces.php",
+            "@php mediawiki-category-members.php",
+            "@php mediawiki-random-pages.php",
+            "@php wikidata-search-earth.php",
+            "@php wikidata-query-one.php"
+        ]
+    },
     "config": {
         "audit": {
             "block-insecure": false
