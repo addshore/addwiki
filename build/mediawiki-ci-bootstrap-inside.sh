@@ -26,7 +26,7 @@ append_if_missing "\$wgGroupPermissions['sysop']['mwoauthproposeconsumer'] = tru
 append_if_missing "\$wgGroupPermissions['sysop']['mwoauthmanageconsumer'] = true;" LocalSettings.php
 append_if_missing "\$wgGroupPermissions['sysop']['mwoauthviewprivate'] = true;" LocalSettings.php
 append_if_missing "\$wgGroupPermissions['sysop']['mwoauthupdateownconsumer'] = true;" LocalSettings.php
-append_if_missing "require_once \"\$IP/extensions/Wikibase/vendor/autoload.php\";" LocalSettings.php
+append_if_missing "if ( version_compare( MW_VERSION, '1.43', '<' ) ) { require_once \"\$IP/extensions/Wikibase/vendor/autoload.php\"; }" LocalSettings.php
 append_if_missing "wfLoadExtension( 'WikibaseRepository', \"\$IP/extensions/Wikibase/extension-repo.json\" );" LocalSettings.php
 append_if_missing "require_once \"\$IP/extensions/Wikibase/repo/ExampleSettings.php\";" LocalSettings.php
 append_if_missing "\$wgGroupPermissions['*']['noratelimit'] = true;" LocalSettings.php

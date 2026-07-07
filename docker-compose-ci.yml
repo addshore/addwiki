@@ -8,6 +8,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-ci
+      args:
+        MEDIAWIKI_VERSION: ${MEDIAWIKI_VERSION:-1.39.8}
+        MEDIAWIKI_BRANCH: ${MEDIAWIKI_BRANCH:-REL1_39}
     restart: "no"
     healthcheck:
       test: ["CMD", "curl", "--silent", "--show-error", "--fail", "http://127.0.0.1/"]

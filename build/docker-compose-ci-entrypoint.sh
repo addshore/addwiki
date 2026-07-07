@@ -21,7 +21,7 @@ if [ ! -f entrypoint-done.txt ]; then
     echo "\$wgGroupPermissions['sysop']['mwoauthmanageconsumer'] = true;" >> LocalSettings.php
     echo "\$wgGroupPermissions['sysop']['mwoauthviewprivate'] = true;" >> LocalSettings.php
     echo "\$wgGroupPermissions['sysop']['mwoauthupdateownconsumer'] = true;" >> LocalSettings.php
-    echo "require_once \"\$IP/extensions/Wikibase/vendor/autoload.php\";" >> LocalSettings.php
+    echo "if ( version_compare( MW_VERSION, '1.43', '<' ) ) { require_once \"\$IP/extensions/Wikibase/vendor/autoload.php\"; }" >> LocalSettings.php
     echo "wfLoadExtension( 'WikibaseRepository', \"\$IP/extensions/Wikibase/extension-repo.json\" );" >> LocalSettings.php
     echo "require_once \"\$IP/extensions/Wikibase/repo/ExampleSettings.php\";" >> LocalSettings.php
 

@@ -1,4 +1,4 @@
-name: Unified package tests
+name: Tests
 
 on:
     pull_request: null
@@ -64,7 +64,20 @@ jobs:
 
     integration:
         runs-on: ubuntu-latest
-        name: Integration tests (PHP 8.5)
+        name: Integration tests (MediaWiki ${{ matrix.mediawiki.version }}, PHP 8.5)
+
+        strategy:
+            fail-fast: false
+            matrix:
+                mediawiki:
+                    - version: "1.39.8"
+                      branch: REL1_39
+                    - version: "1.43"
+                      branch: REL1_43
+                    - version: "1.45"
+                      branch: REL1_45
+                    - version: "1.46"
+                      branch: REL1_46
 
         steps:
             -   uses: actions/checkout@v4
@@ -81,6 +94,9 @@ jobs:
                     composer-options: "--ignore-platform-req php"
 
             -   name: Run CI docker compose if present
+                env:
+                    MEDIAWIKI_VERSION: ${{ matrix.mediawiki.version }}
+                    MEDIAWIKI_BRANCH: ${{ matrix.mediawiki.branch }}
                 run: |
                     if [ -f docker-compose-ci.yml ]; then
                         docker compose --file docker-compose-ci.yml up -d --wait --wait-timeout 180
