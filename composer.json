@@ -85,6 +85,7 @@
     ],
     "require-dev": {
         "data-values/validators": "~0.1.0",
+        "doctrine/instantiator": "^1.5",
         "mediawiki/mediawiki-codesniffer": "~38.0",
         "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpunit/phpunit": "~9",
