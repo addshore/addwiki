@@ -8,6 +8,7 @@ use GuzzleHttp\HandlerStack;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use RuntimeException;
 
 class ClientFactory implements LoggerAwareInterface {
 
@@ -70,6 +71,10 @@ class ClientFactory implements LoggerAwareInterface {
 
 	private function setDefaultHandlerIfNotInConfigAlready(): void {
 		if ( !array_key_exists( 'handler', $this->config ) ) {
+			if ( !extension_loaded( 'curl' ) ) {
+				throw new RuntimeException( 'PHP extension ext-curl is required by addwiki/mediawiki-api-base for HTTP requests.' );
+			}
+
 			$this->config['handler'] = HandlerStack::create( new CurlHandler() );
 		}
 	}
