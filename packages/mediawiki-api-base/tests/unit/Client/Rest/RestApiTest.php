@@ -5,9 +5,10 @@ declare( strict_types = 1 );
 namespace Addwiki\Mediawiki\Api\Tests\Unit\Client\Rest;
 
 use Addwiki\Mediawiki\Api\Client\Action\Tokens;
-use Addwiki\Mediawiki\Api\Client\Rest\RestApi;
 use Addwiki\Mediawiki\Api\Client\Request\StandardRequest;
+use Addwiki\Mediawiki\Api\Client\Rest\RestApi;
 use GuzzleHttp\ClientInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 
@@ -48,8 +49,13 @@ class RestApiTest extends TestCase {
 		$api = new RestApi( 'http://localhost/rest.php', null, $client, $this->getMockTokens() );
 
 		$request = new class extends StandardRequest {
-			public function getPath(): string { return '/path'; }
-			public function getMethod(): string { return 'GET'; }
+			public function getPath(): string {
+				return '/path';
+			}
+
+			public function getMethod(): string {
+				return 'GET';
+			}
 		};
 		$request->setParam( 'foo', 'bar' );
 
@@ -63,7 +69,11 @@ class RestApiTest extends TestCase {
 			->method( 'request' )
 			->with( 'POST', 'http://localhost/rest.php/upload', [
 				'multipart' => [
-					[ 'name' => 'chunk', 'contents' => 'data', 'headers' => [ 'Content-Disposition' => 'form-data; name="chunk"; filename="foo.jpg"' ] ],
+					[
+						'name' => 'chunk',
+						'contents' => 'data',
+						'headers' => [ 'Content-Disposition' => 'form-data; name="chunk"; filename="foo.jpg"' ],
+					],
 					[ 'name' => 'assert', 'contents' => 'anon' ],
 				],
 				'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client' ],
@@ -73,8 +83,13 @@ class RestApiTest extends TestCase {
 		$api = new RestApi( 'http://localhost/rest.php', null, $client, $this->getMockTokens() );
 
 		$request = new class extends StandardRequest {
-			public function getPath(): string { return '/upload'; }
-			public function getMethod(): string { return 'POST'; }
+			public function getPath(): string {
+				return '/upload';
+			}
+
+			public function getMethod(): string {
+				return 'POST';
+			}
 		};
 		$request->setParam( 'chunk', 'data' );
 		$request->setMultipartParams( [

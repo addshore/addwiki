@@ -188,7 +188,11 @@ class ActionApiTest extends TestCase {
 			[
 				'multipart' => [
 					[ 'name' => 'action', 'contents' => 'upload' ],
-					[ 'name' => 'chunk', 'contents' => 'data', 'headers' => [ 'Content-Disposition' => 'form-data; name="chunk"; filename="foo.jpg"' ] ],
+					[
+						'name' => 'chunk',
+						'contents' => 'data',
+						'headers' => [ 'Content-Disposition' => 'form-data; name="chunk"; filename="foo.jpg"' ],
+					],
 					[ 'name' => 'format', 'contents' => 'json' ],
 					[ 'name' => 'assert', 'contents' => 'anon' ],
 				],
