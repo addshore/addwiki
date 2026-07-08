@@ -36,13 +36,18 @@ class RestApiTest extends TestCase {
 		return $this->createMock( Tokens::class );
 	}
 
+	private function getUserAgent(): string {
+		$version = \Composer\InstalledVersions::getPrettyVersion( 'addwiki/addwiki' );
+		return "addwiki/addwiki-$version mediawiki-api-base/$version";
+	}
+
 	public function testGetRequest(): void {
 		$client = $this->getMockClient();
 		$client->expects( $this->once() )
 			->method( 'request' )
 			->with( 'GET', 'http://localhost/rest.php/path', [
 				'query' => [ 'foo' => 'bar', 'assert' => 'anon' ],
-				'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client' ],
+				'headers' => [ 'User-Agent' => $this->getUserAgent() ],
 			] )
 			->will( $this->returnValue( $this->getMockResponse( [ 'ok' => true ] ) ) );
 
@@ -76,7 +81,7 @@ class RestApiTest extends TestCase {
 					],
 					[ 'name' => 'assert', 'contents' => 'anon' ],
 				],
-				'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client' ],
+				'headers' => [ 'User-Agent' => $this->getUserAgent() ],
 			] )
 			->will( $this->returnValue( $this->getMockResponse( [ 'ok' => true ] ) ) );
 

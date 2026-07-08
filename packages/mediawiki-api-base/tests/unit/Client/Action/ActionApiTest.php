@@ -52,14 +52,18 @@ class ActionApiTest extends TestCase {
 		return $mock;
 	}
 
+	private function getUserAgent(): string {
+		$version = \Composer\InstalledVersions::getPrettyVersion( 'addwiki/addwiki' );
+		return "addwiki/addwiki-$version mediawiki-api-base/$version";
+	}
+
 	/**
 	 * @return array <int|string mixed[]>
 	 */
 	private function getExpectedRequestOpts( $params, $paramsLocation ): array {
-		$version = \Composer\InstalledVersions::getPrettyVersion( 'addwiki/addwiki' );
 		return [
 			$paramsLocation => array_merge( $params, [ 'format' => 'json', 'assert' => 'anon' ] ),
-			'headers' => [ 'User-Agent' => "addwiki/addwiki-$version mediawiki-api-base/$version" ],
+			'headers' => [ 'User-Agent' => $this->getUserAgent() ],
 		];
 	}
 
@@ -154,7 +158,6 @@ class ActionApiTest extends TestCase {
 	}
 
 	public function testPostActionWithFileReturnsResult(): void {
-		$version = \Composer\InstalledVersions::getPrettyVersion( 'addwiki/addwiki' );
 		$dummyFile = $this->getNullFilePointer();
 		$params = [
 			'filename' => 'foo.jpg',
@@ -172,7 +175,7 @@ class ActionApiTest extends TestCase {
 						[ 'name' => 'format', 'contents' => 'json' ],
 						[ 'name' => 'assert', 'contents' => 'anon' ],
 					],
-					'headers' => [ 'User-Agent' => "addwiki/addwiki-$version mediawiki-api-base/$version" ],
+					'headers' => [ 'User-Agent' => $this->getUserAgent() ],
 				]
 			)->will( $this->returnValue( $this->getMockResponse( [ 'success ' => 1 ] ) ) );
 		$api = new ActionApi( '', null, $client );
@@ -198,7 +201,7 @@ class ActionApiTest extends TestCase {
 					[ 'name' => 'format', 'contents' => 'json' ],
 					[ 'name' => 'assert', 'contents' => 'anon' ],
 				],
-				'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client' ],
+				'headers' => [ 'User-Agent' => $this->getUserAgent() ],
 			]
 		)->will( $this->returnValue( $this->getMockResponse( [ 'success ' => 1 ] ) ) );
 		$api = new ActionApi( '', null, $client );
@@ -224,7 +227,7 @@ class ActionApiTest extends TestCase {
 					[ 'name' => 'format', 'contents' => 'json' ],
 					[ 'name' => 'assert', 'contents' => 'anon' ],
 				],
-				'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client' ],
+				'headers' => [ 'User-Agent' => $this->getUserAgent() ],
 			]
 		)->will( $this->returnValue( new \GuzzleHttp\Promise\FulfilledPromise( $this->getMockResponse( [ 'success ' => 1 ] ) ) ) );
 		$api = new ActionApi( '', null, $client );
