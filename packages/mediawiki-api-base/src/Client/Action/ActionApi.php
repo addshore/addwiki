@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Addwiki\Mediawiki\Api\Client\Action;
 
+use Addwiki\Mediawiki\Api\Client\Action\Exception\UnexpectedResponseException;
 use Addwiki\Mediawiki\Api\Client\Action\Exception\UsageException;
 use Addwiki\Mediawiki\Api\Client\Action\Request\ActionRequest;
 use Addwiki\Mediawiki\Api\Client\Auth\AuthMethod;
@@ -137,6 +138,10 @@ class ActionApi implements Requester, LoggerAwareInterface {
 	 */
 	private function decodeResponse( ResponseInterface $response ) {
 		$resultArray = json_decode( (string)$response->getBody(), true );
+
+		if ( !is_array( $resultArray ) ) {
+			throw new UnexpectedResponseException( $response );
+		}
 
 		$this->logWarnings( $resultArray );
 		$this->throwUsageExceptions( $resultArray );
