@@ -43,7 +43,12 @@ jobs:
 
     examples:
         runs-on: ubuntu-latest
-        name: Examples smoke test (PHP 8.5)
+        name: Examples smoke test (PHP 8.5, Guzzle ${{ matrix.guzzle }})
+
+        strategy:
+            fail-fast: false
+            matrix:
+                guzzle: ["^6.5.8", "^7.0"]
 
         steps:
             -   uses: actions/checkout@v4
@@ -57,7 +62,9 @@ jobs:
                     coverage: none
 
             -   name: Install example dependencies
-                run: composer --working-dir=examples install --no-interaction --prefer-dist --ignore-platform-req php
+                run: |
+                    composer --working-dir=examples require "guzzlehttp/guzzle:${{ matrix.guzzle }}" --no-interaction --no-install
+                    composer --working-dir=examples update --no-interaction --prefer-dist --ignore-platform-req php
 
             -   name: Run examples
                 run: composer --working-dir=examples test
