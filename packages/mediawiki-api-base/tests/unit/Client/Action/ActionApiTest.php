@@ -180,6 +180,56 @@ class ActionApiTest extends TestCase {
 		$this->assertEquals( [ 'success ' => 1 ], $result );
 	}
 
+	public function testMultipartRequestWithExtraHeaders(): void {
+		$client = $this->getMockClient();
+		$client->expects( $this->once() )->method( 'request' )->with(
+			'POST',
+			null,
+			[
+				'multipart' => [
+					[ 'name' => 'action', 'contents' => 'upload' ],
+					[ 'name' => 'chunk', 'contents' => 'data', 'headers' => [ 'Content-Disposition' => 'form-data; name="chunk"; filename="foo.jpg"' ] ],
+					[ 'name' => 'format', 'contents' => 'json' ],
+					[ 'name' => 'assert', 'contents' => 'anon' ],
+				],
+				'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client' ],
+			]
+		)->will( $this->returnValue( $this->getMockResponse( [ 'success ' => 1 ] ) ) );
+		$api = new ActionApi( '', null, $client );
+
+		$request = ActionRequest::simplePost( 'upload', [ 'chunk' => 'data' ] )
+			->setMultipartParams( [
+				'chunk' => [ 'headers' => [ 'Content-Disposition' => 'form-data; name="chunk"; filename="foo.jpg"' ] ],
+			] );
+
+		$result = $api->request( $request );
+
+		$this->assertEquals( [ 'success ' => 1 ], $result );
+	}
+
+	public function testMultipartRequestAsync(): void {
+		$client = $this->getMockClient();
+		$client->expects( $this->once() )->method( 'requestAsync' )->with(
+			'POST',
+			null,
+			[
+				'multipart' => [
+					[ 'name' => 'action', 'contents' => 'upload' ],
+					[ 'name' => 'format', 'contents' => 'json' ],
+					[ 'name' => 'assert', 'contents' => 'anon' ],
+				],
+				'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client' ],
+			]
+		)->will( $this->returnValue( new \GuzzleHttp\Promise\FulfilledPromise( $this->getMockResponse( [ 'success ' => 1 ] ) ) ) );
+		$api = new ActionApi( '', null, $client );
+
+		$request = ActionRequest::simplePost( 'upload' )->setMultipart( true );
+
+		$result = $api->requestAsync( $request )->wait();
+
+		$this->assertEquals( [ 'success ' => 1 ], $result );
+	}
+
 	public function provideActionsParamsResults(): array {
 		return [
 			[ [ 'key' => 'value' ], 'logout' ],
