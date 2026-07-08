@@ -53,8 +53,7 @@ Run phpunit tests on a single internal package:
 vendor/bin/phpunit packages/mediawiki-api-base/tests/unit
 ```
 
-Integration tests are facilitated by `docker-compose-ci.yml` files which are currently kept in sync manually.
-The setup in the monorepo should work for all packages.
+Integration tests are facilitated by the `docker-compose-ci.yml` file.
 Run it before running integration tests.
 
 ```sh

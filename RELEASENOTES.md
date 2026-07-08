@@ -10,6 +10,7 @@ This repository now ships as a single Composer package: `addwiki/addwiki`.
 - Removed split-package Composer manifests and split-release workflows.
 - Unified test and validation workflows at repository root.
 - Consolidated packaging metadata and housekeeping files to the root.
+- Refined internal package documentation and updated references to the unified package.
 
 ## Historical notes
 
