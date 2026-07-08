@@ -6,6 +6,7 @@ namespace Addwiki\Mediawiki\Api\Client\Action;
 
 use Addwiki\Mediawiki\Api\Client\Action\Exception\UnexpectedResponseException;
 use Addwiki\Mediawiki\Api\Client\Action\Exception\UsageException;
+use Addwiki\Mediawiki\Api\Client\UserAgentHelper;
 use Addwiki\Mediawiki\Api\Client\Action\Request\ActionRequest;
 use Addwiki\Mediawiki\Api\Client\Auth\AuthMethod;
 use Addwiki\Mediawiki\Api\Client\Auth\NoAuth;
@@ -207,15 +208,7 @@ class ActionApi implements Requester, LoggerAwareInterface {
 	}
 
 	private function getUserAgent(): string {
-		if ( !$this->auth instanceof NoAuth ) {
-			if ( $this->auth instanceof UserAndPassword || $this->auth instanceof UserAndPasswordWithDomain ) {
-				return 'addwiki-mediawiki-client/' . $this->auth->getUsername();
-			}
-
-			return 'addwiki-mediawiki-client/SomeUnknownUser?';
-		}
-
-		return 'addwiki-mediawiki-client';
+		return UserAgentHelper::getUserAgent( $this->auth );
 	}
 
 	private function logWarnings( $result ): void {

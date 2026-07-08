@@ -16,6 +16,8 @@ use InvalidArgumentException;
  */
 class UserAndPassword implements AuthMethod {
 
+	use UserAgentSettings;
+
 	private string $password;
 
 	private string $username;
@@ -119,6 +121,9 @@ class UserAndPassword implements AuthMethod {
 	}
 
 	public function identifierForUserAgent(): ?string {
+		if ( $this->getCustomUserAgentIdentifier() !== null ) {
+			return $this->getCustomUserAgentIdentifier();
+		}
 		return 'user/' . $this->getUsername();
 	}
 

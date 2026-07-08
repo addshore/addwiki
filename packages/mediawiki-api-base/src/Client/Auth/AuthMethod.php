@@ -26,4 +26,23 @@ interface AuthMethod {
 	 */
 	public function identifierForUserAgent(): ?string;
 
+	/**
+	 * Set a custom identifier for the user agent.
+	 * This could be a username, or a consumer ID for example.
+	 *
+	 * Example: "user/Addshore" or "oauth-consumer/123abc"
+	 */
+	public function setIdentifierForUserAgent( string $identifier ): void;
+
+	/**
+	 * Set a custom User-Agent string to be used for all requests.
+	 * If this is set, it will be used instead of the default User-Agent string.
+	 */
+	public function setUserAgentOverride( string $userAgent ): void;
+
+	/**
+	 * Get the custom User-Agent string to be used for all requests.
+	 */
+	public function userAgentOverride(): ?string;
+
 }

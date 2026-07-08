@@ -46,6 +46,9 @@ class UserAndPasswordWithDomain extends UserAndPassword implements AuthMethod {
 	}
 
 	public function identifierForUserAgent(): ?string {
+		if ( $this->getCustomUserAgentIdentifier() !== null ) {
+			return $this->getCustomUserAgentIdentifier();
+		}
 		return 'user/' . $this->getUsername() . '@' . $this->getDomain();
 	}
 
