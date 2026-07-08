@@ -56,9 +56,10 @@ class ActionApiTest extends TestCase {
 	 * @return array <int|string mixed[]>
 	 */
 	private function getExpectedRequestOpts( $params, $paramsLocation ): array {
+		$version = \Composer\InstalledVersions::getPrettyVersion( 'addwiki/addwiki' );
 		return [
 			$paramsLocation => array_merge( $params, [ 'format' => 'json', 'assert' => 'anon' ] ),
-			'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client' ],
+			'headers' => [ 'User-Agent' => "addwiki/addwiki-$version mediawiki-api-base/$version" ],
 		];
 	}
 
@@ -153,6 +154,7 @@ class ActionApiTest extends TestCase {
 	}
 
 	public function testPostActionWithFileReturnsResult(): void {
+		$version = \Composer\InstalledVersions::getPrettyVersion( 'addwiki/addwiki' );
 		$dummyFile = $this->getNullFilePointer();
 		$params = [
 			'filename' => 'foo.jpg',
@@ -170,7 +172,7 @@ class ActionApiTest extends TestCase {
 						[ 'name' => 'format', 'contents' => 'json' ],
 						[ 'name' => 'assert', 'contents' => 'anon' ],
 					],
-					'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client' ],
+					'headers' => [ 'User-Agent' => "addwiki/addwiki-$version mediawiki-api-base/$version" ],
 				]
 			)->will( $this->returnValue( $this->getMockResponse( [ 'success ' => 1 ] ) ) );
 		$api = new ActionApi( '', null, $client );

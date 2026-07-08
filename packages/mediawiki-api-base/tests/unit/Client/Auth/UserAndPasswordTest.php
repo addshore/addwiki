@@ -82,9 +82,10 @@ class UserAndPasswordTest extends TestCase {
 	 * @return array <int|string mixed[]>
 	 */
 	private function getExpectedRequestOpts( $params, $paramsLocation ): array {
+		$version = \Composer\InstalledVersions::getPrettyVersion( 'addwiki/addwiki' );
 		return [
 			$paramsLocation => array_merge( $params, [ 'format' => 'json' ] ),
-			'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client/user/U1' ],
+			'headers' => [ 'User-Agent' => "addwiki/addwiki-$version (user/U1) mediawiki-api-base/$version" ],
 		];
 	}
 
@@ -146,6 +147,7 @@ class UserAndPasswordTest extends TestCase {
 	}
 
 	public function testCustomIdentifierForUserAgent(): void {
+		$version = \Composer\InstalledVersions::getPrettyVersion( 'addwiki/addwiki' );
 		$client = $this->createMock( ClientInterface::class );
 		$client->expects( $this->once() )
 			->method( 'request' )
@@ -154,7 +156,7 @@ class UserAndPasswordTest extends TestCase {
 				null,
 				[
 					'query' => [ 'action' => 'dummyrequest', 'format' => 'json', 'assert' => 'user' ],
-					'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client/CustomID' ],
+					'headers' => [ 'User-Agent' => "addwiki/addwiki-$version (CustomID) mediawiki-api-base/$version" ],
 				]
 			)
 			->willReturn( $this->getMockResponse( [] ) );
@@ -162,6 +164,32 @@ class UserAndPasswordTest extends TestCase {
 		$auth = new UserAndPassword( 'U1', 'P1' );
 		$auth->setIdentifierForUserAgent( 'CustomID' );
 		// Fake being logged in so we don't have to deal with the login sequence here
+		$reflection = new \ReflectionClass( $auth );
+		$property = $reflection->getProperty( 'isLoggedIn' );
+		$property->setAccessible( true );
+		$property->setValue( $auth, true );
+
+		$api = new ActionApi( '', $auth, $client );
+		$api->request( ActionRequest::simpleGet( 'dummyrequest' ) );
+	}
+
+	public function testUserAgentOverride(): void {
+		$client = $this->createMock( ClientInterface::class );
+		$client->expects( $this->once() )
+			->method( 'request' )
+			->with(
+				'GET',
+				null,
+				[
+					'query' => [ 'action' => 'dummyrequest', 'format' => 'json', 'assert' => 'user' ],
+					'headers' => [ 'User-Agent' => 'MySpecialUserAgent/1.0' ],
+				]
+			)
+			->willReturn( $this->getMockResponse( [] ) );
+
+		$auth = new UserAndPassword( 'U1', 'P1' );
+		$auth->setUserAgentOverride( 'MySpecialUserAgent/1.0' );
+		// Fake being logged in
 		$reflection = new \ReflectionClass( $auth );
 		$property = $reflection->getProperty( 'isLoggedIn' );
 		$property->setAccessible( true );

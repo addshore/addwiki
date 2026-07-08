@@ -34,4 +34,15 @@ interface AuthMethod {
 	 */
 	public function setIdentifierForUserAgent( string $identifier ): void;
 
+	/**
+	 * Set a custom User-Agent string to be used for all requests.
+	 * If this is set, it will be used instead of the default User-Agent string.
+	 */
+	public function setUserAgentOverride( string $userAgent ): void;
+
+	/**
+	 * Get the custom User-Agent string to be used for all requests.
+	 */
+	public function userAgentOverride(): ?string;
+
 }

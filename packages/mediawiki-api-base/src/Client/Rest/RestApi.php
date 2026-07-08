@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Addwiki\Mediawiki\Api\Client\Rest;
 
 use Addwiki\Mediawiki\Api\Client\Action\Tokens;
+use Addwiki\Mediawiki\Api\Client\UserAgentHelper;
 use Addwiki\Mediawiki\Api\Client\Auth\AuthMethod;
 use Addwiki\Mediawiki\Api\Client\Auth\NoAuth;
 use Addwiki\Mediawiki\Api\Client\Auth\UserAndPassword;
@@ -197,11 +198,7 @@ class RestApi implements Requester, LoggerAwareInterface {
 	}
 
 	private function getUserAgent(): string {
-		$identifier = $this->auth->identifierForUserAgent();
-		if ( $identifier !== null ) {
-			return 'addwiki-mediawiki-client/' . $identifier;
-		}
-		return 'addwiki-mediawiki-client';
+		return UserAgentHelper::getUserAgent( $this->auth );
 	}
 
 	public function getToken( $type = 'csrf' ): string {

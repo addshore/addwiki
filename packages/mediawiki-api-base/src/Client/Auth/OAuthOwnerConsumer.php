@@ -17,6 +17,8 @@ use MediaWiki\OAuthClient\Token;
  */
 class OAuthOwnerConsumer implements AuthMethod {
 
+	use UserAgentSettings;
+
 	private string $consumerKey;
 
 	private string $consumerSecret;
@@ -24,8 +26,6 @@ class OAuthOwnerConsumer implements AuthMethod {
 	private string $accessToken;
 
 	private string $accessSecret;
-
-	private ?string $userAgentIdentifier = null;
 
 	public function __construct( string $consumerKey, string $consumerSecret, string $accessToken, string $accessSecret ) {
 		if ( empty( $consumerKey ) || empty( $consumerSecret ) || empty( $accessToken ) || empty( $accessSecret ) ) {
@@ -84,14 +84,10 @@ class OAuthOwnerConsumer implements AuthMethod {
 	}
 
 	public function identifierForUserAgent(): ?string {
-		if ( $this->userAgentIdentifier !== null ) {
-			return $this->userAgentIdentifier;
+		if ( $this->getCustomUserAgentIdentifier() !== null ) {
+			return $this->getCustomUserAgentIdentifier();
 		}
 		return 'oauth-consumer/' . $this->getConsumerKey();
-	}
-
-	public function setIdentifierForUserAgent( string $identifier ): void {
-		$this->userAgentIdentifier = $identifier;
 	}
 
 }

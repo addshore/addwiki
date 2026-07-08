@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Addwiki\Mediawiki\Api\Client\Action;
 
 use Addwiki\Mediawiki\Api\Client\Action\Exception\UsageException;
+use Addwiki\Mediawiki\Api\Client\UserAgentHelper;
 use Addwiki\Mediawiki\Api\Client\Action\Request\ActionRequest;
 use Addwiki\Mediawiki\Api\Client\Auth\AuthMethod;
 use Addwiki\Mediawiki\Api\Client\Auth\NoAuth;
@@ -202,11 +203,7 @@ class ActionApi implements Requester, LoggerAwareInterface {
 	}
 
 	private function getUserAgent(): string {
-		$identifier = $this->auth->identifierForUserAgent();
-		if ( $identifier !== null ) {
-			return 'addwiki-mediawiki-client/' . $identifier;
-		}
-		return 'addwiki-mediawiki-client';
+		return UserAgentHelper::getUserAgent( $this->auth );
 	}
 
 	private function logWarnings( $result ): void {
