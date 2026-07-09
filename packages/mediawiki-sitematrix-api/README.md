@@ -4,9 +4,13 @@
 
 ## Installation
 
-Use composer to install the library and all its dependencies:
+Install the unified toolkit package:
 
-    composer require "addwiki/mediawiki-sitematrix-api:~0.1.0"
+```sh
+composer require addwiki/addwiki
+```
+
+This module lives in `packages/mediawiki-sitematrix-api` and is autoloaded via the root package.
 
 ## Example Usage
 

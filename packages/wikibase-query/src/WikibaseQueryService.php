@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Wikibase\Query;
 
 use GuzzleHttp\ClientInterface;
@@ -28,7 +30,7 @@ class WikibaseQueryService {
 		$sparqlResponse = $this->client->get(
 			$this->sparqlEndpoint . '?format=json&query=' . urlencode( $query )
 		);
-		$sparqlArray = json_decode( $sparqlResponse->getBody(), true );
+		$sparqlArray = json_decode( (string)$sparqlResponse->getBody(), true );
 		return $sparqlArray;
 	}
 

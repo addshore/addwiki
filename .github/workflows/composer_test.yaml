@@ -13,18 +13,18 @@ env:
     COMPOSER_ROOT_VERSION: "dev-main"
 
 jobs:
-    tests:
+    unit_and_quality:
         runs-on: ubuntu-latest
 
         strategy:
             fail-fast: false
             matrix:
-                php: [8.1,8.2]
+                php: [8.2,8.3,8.4,8.5]
 
-        name: Test monorepo with PHP ${{ matrix.php }}
+        name: Quality + unit tests (PHP ${{ matrix.php }})
 
         steps:
-            -   uses: actions/checkout@v4
+            -   uses: actions/checkout@v7
 
             -   uses: shivammathur/setup-php@v2
                 env:
@@ -34,14 +34,96 @@ jobs:
                     coverage: none
 
             -
-                uses: "ramsey/composer-install@v3"
+                uses: "ramsey/composer-install@v4"
+                with:
+                    composer-options: "--ignore-platform-req php"
+
+            -
+                run: composer test
+
+    examples:
+        runs-on: ubuntu-latest
+        name: Examples smoke test (PHP 8.5, Guzzle ${{ matrix.guzzle }})
+
+        strategy:
+            fail-fast: false
+            matrix:
+                guzzle: ["^6.5.8", "^7.0"]
+
+        steps:
+            -   uses: actions/checkout@v4
+
+            -   uses: shivammathur/setup-php@v2
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                with:
+                    php-version: 8.5
+                    extensions: curl, dom, simplexml
+                    coverage: none
+
+            -   name: Install example dependencies
+                run: |
+                    composer --working-dir=examples require "guzzlehttp/guzzle:${{ matrix.guzzle }}" --no-interaction --no-install
+                    composer --working-dir=examples update --no-interaction --prefer-dist --ignore-platform-req php
+
+            -   name: Run examples
+                run: composer --working-dir=examples test
+
+    integration:
+        runs-on: ubuntu-latest
+        name: Integration tests (MediaWiki ${{ matrix.mediawiki.version }}, PHP 8.5)
+
+        strategy:
+            fail-fast: false
+            matrix:
+                mediawiki:
+                    - version: "1.39.8"
+                      branch: REL1_39
+                    - version: "1.43"
+                      branch: REL1_43
+                    - version: "1.45"
+                      branch: REL1_45
+                    - version: "1.46"
+                      branch: REL1_46
+
+        steps:
+            -   uses: actions/checkout@v4
+
+            -   uses: shivammathur/setup-php@v2
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                with:
+                    php-version: 8.5
+                    coverage: none
+
+            -   uses: "ramsey/composer-install@v3"
                 with:
                     composer-options: "--ignore-platform-req php"
 
             -   name: Run CI docker compose if present
-                run: '(test -f docker-compose-ci.yml && docker compose --file docker-compose-ci.yml up -d) || echo No docker-compose-ci.yml, skipping step'
-            -   name: Wait for docker compose to be ready (if needed)
-                run: '(test -f build/docker-compose-ci-wait.sh && build/docker-compose-ci-wait.sh) || echo No docker-compose-ci-wait.sh, not waiting'
+                env:
+                    MEDIAWIKI_VERSION: ${{ matrix.mediawiki.version }}
+                    MEDIAWIKI_BRANCH: ${{ matrix.mediawiki.branch }}
+                run: |
+                    if [ -f docker-compose-ci.yml ]; then
+                        docker compose --file docker-compose-ci.yml up -d --wait --wait-timeout 180
+                    else
+                        echo "No docker-compose-ci.yml, skipping step"
+                    fi
 
-            -
-                run: composer test
+            -   name: Bootstrap MediaWiki test wiki
+                run: |
+                    if [ -f build/docker-compose-ci-bootstrap.sh ]; then
+                        bash build/docker-compose-ci-bootstrap.sh
+                    else
+                        echo "No docker-compose-ci-bootstrap.sh, skipping step"
+                    fi
+
+            -   name: Run integration tests
+                run: composer phpunit-integration
+
+            -   name: Dump docker diagnostics on failure
+                if: failure()
+                run: |
+                    docker compose --file docker-compose-ci.yml ps
+                    docker compose --file docker-compose-ci.yml logs --no-color --tail=400 mediawiki database

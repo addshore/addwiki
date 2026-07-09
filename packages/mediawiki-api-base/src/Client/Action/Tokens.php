@@ -1,8 +1,11 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Client\Action;
 
 use Addwiki\Mediawiki\Api\Client\Action\Request\ActionRequest;
+use UnexpectedValueException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -67,6 +70,9 @@ class Tokens implements LoggerAwareInterface {
 		$result = @$this->api->request( // @codingStandardsIgnoreLine
 			ActionRequest::simplePost( 'tokens', [ 'type' => $this->getOldTokenType( $type ) ] )
 		);
+		if ( !isset( $result['tokens'] ) || !is_array( $result['tokens'] ) || $result['tokens'] === [] ) {
+			throw new UnexpectedValueException( 'Invalid pre-1.25 token response payload.' );
+		}
 		$this->tokens[$type] = array_pop( $result['tokens'] );
 
 		return $this->tokens[$type];
@@ -89,6 +95,9 @@ class Tokens implements LoggerAwareInterface {
 			$this->logger->log( LogLevel::DEBUG, 'Falling back to pre 1.25 token system' );
 			$this->tokens[$type] = $this->reallyGetPre125Token( $type );
 		} else {
+			if ( !isset( $result['query']['tokens'] ) || !is_array( $result['query']['tokens'] ) || $result['query']['tokens'] === [] ) {
+				throw new UnexpectedValueException( 'Invalid token response payload.' );
+			}
 			$this->tokens[$type] = array_pop( $result['query']['tokens'] );
 		}
 

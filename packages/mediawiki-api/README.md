@@ -1,14 +1,16 @@
 # mediawiki-api
 
 [![GitHub issue custom search in repo](https://img.shields.io/github/issues-search/addwiki/addwiki?label=issues&query=is%3Aissue%20is%3Aopen%20%5Bmediawiki-api%5D)](https://github.com/addwiki/addwiki/issues?q=is%3Aissue+is%3Aopen+%5Bmediawiki-api%5D+)
-[![Latest Stable Version](https://poser.pugx.org/addwiki/mediawiki-api/version.png)](https://packagist.org/packages/addwiki/mediawiki-api)
-[![Download count](https://poser.pugx.org/addwiki/mediawiki-api/d/total.png)](https://packagist.org/packages/addwiki/mediawiki-api)
 
 ## Installation
 
-Use composer to install the library and all its dependencies:
+Install the unified toolkit package:
 
-    composer require "addwiki/mediawiki-api:~3.0"
+```sh
+composer require addwiki/addwiki
+```
+
+This module lives in `packages/mediawiki-api` and is autoloaded via the root package.
 
 ## Example Usage
 
@@ -52,16 +54,3 @@ $services->newRevisionSaver()->save( $revision );
 $pages = $services->newPageListGetter()->getPageListFromCategoryName( 'Category:Cat name' );
 ```
 
-## Running the integration tests
-
-To run the integration tests, you need to have a running MediaWiki instance. The tests will create pages and categories without using a user account so it's best if you use a test instance. Furthermore you need to turn off rate limiting by adding the line
-
-   $wgGroupPermissions['*']['noratelimit'] = true;
-
-to the `LocalSettings.php` of your MediaWiki.
-
-By default, the tests will use the URL `http://localhost/w/api.php` as the API endpoint. If you have a different URL (e.g. `http://localhost:8080/w/api.php`), you need to configure the URL as an environment variable before running the tests. Example:
-
-    export MEDIAWIKI_API_URL='http://localhost:8080/w/api.php'
-
-**Warning:** Running the integration tests can take a long time to complete.

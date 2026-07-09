@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Client\Auth;
 
 use Addwiki\Mediawiki\Api\Client\Action\ActionApi;
@@ -13,6 +15,8 @@ use InvalidArgumentException;
  * For use with plain MediaWiki logins
  */
 class UserAndPassword implements AuthMethod {
+
+	use UserAgentSettings;
 
 	private string $password;
 
@@ -67,21 +71,24 @@ class UserAndPassword implements AuthMethod {
 			return $request;
 		}
 
-		$loginParams = [
-			'lgname' => $this->getUsername(),
-			'lgpassword' => $this->getPassword(),
-		];
+		$loginParams = array_merge(
+			[
+				'lgname' => $this->getUsername(),
+				'lgpassword' => $this->getPassword(),
+			],
+			$this->additionalParamsForPreRequestAuthCall()
+		);
 
 		// First Request
 		$result = $requester->request( ActionRequest::simplePost( 'login', $loginParams ) );
-		if ( $result['login']['result'] == 'NeedToken' ) {
+		if ( isset( $result['login']['result'] ) && $result['login']['result'] == 'NeedToken' ) {
 			$params = array_merge( [ 'lgtoken' => $result['login']['token'] ], $loginParams );
 			// Second Request
 			$result = $requester->request( ActionRequest::simplePost( 'login', $params ) );
 		}
 
 		// Check for success
-		if ( $result['login']['result'] == 'Success' ) {
+		if ( isset( $result['login']['result'] ) && $result['login']['result'] == 'Success' ) {
 			$this->isLoggedIn = true;
 			return $request;
 		}
@@ -101,12 +108,12 @@ class UserAndPassword implements AuthMethod {
 	 * @throws UsageException
 	 */
 	private function throwLoginUsageException( array $result ): void {
-		$loginResult = $result['login']['result'];
+		$loginResult = $result['login']['result'] ?? 'Unknown';
 
 		// TODO use an Auth exception instead? (to make it easier to catch etc?)
 		throw new UsageException(
 			'login-' . $loginResult,
-			array_key_exists( 'reason', $result['login'] )
+			( isset( $result['login'] ) && array_key_exists( 'reason', $result['login'] ) )
 				? $result['login']['reason']
 				: 'No Reason given',
 			$result
@@ -114,6 +121,9 @@ class UserAndPassword implements AuthMethod {
 	}
 
 	public function identifierForUserAgent(): ?string {
+		if ( $this->getCustomUserAgentIdentifier() !== null ) {
+			return $this->getCustomUserAgentIdentifier();
+		}
 		return 'user/' . $this->getUsername();
 	}
 

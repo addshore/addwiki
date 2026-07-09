@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Client\Auth;
 
 use InvalidArgumentException;
@@ -44,6 +46,9 @@ class UserAndPasswordWithDomain extends UserAndPassword implements AuthMethod {
 	}
 
 	public function identifierForUserAgent(): ?string {
+		if ( $this->getCustomUserAgentIdentifier() !== null ) {
+			return $this->getCustomUserAgentIdentifier();
+		}
 		return 'user/' . $this->getUsername() . '@' . $this->getDomain();
 	}
 

@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Tests\Integration;
 
 use Addwiki\Mediawiki\Api\Client\Action\ActionApi;
@@ -10,8 +12,18 @@ use Exception;
 
 class TestEnvironment {
 
+	/**
+	 * MediaWiki action API endpoint URL.
+	 *
+	 * @var string
+	 */
 	public string $apiUrl;
 
+	/**
+	 * Page URL used for page-based tests.
+	 *
+	 * @var string
+	 */
 	public string $pageUrl;
 
 	protected ActionApi $api;

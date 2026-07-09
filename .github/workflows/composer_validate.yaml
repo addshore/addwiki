@@ -1,4 +1,4 @@
-name: Validate monorepo
+name: Validate Composer manifests
 
 on:
     pull_request: null
@@ -9,14 +9,13 @@ on:
             - '*'
 
 env:
-    # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
     COMPOSER_ROOT_VERSION: "dev-main"
 
 jobs:
     validate:
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v4
+            -   uses: actions/checkout@v7
 
             -   uses: shivammathur/setup-php@v2
                 env:
@@ -26,8 +25,12 @@ jobs:
                     coverage: none
 
             -
-                uses: "ramsey/composer-install@v3"
+                uses: "ramsey/composer-install@v4"
                 with:
                     composer-options: "--ignore-platform-req php"
 
-            -   run: composer validate-monorepo
+            -   name: Validate root composer
+                run: composer validate --strict --no-check-publish
+
+            -   name: Validate examples composer
+                run: composer validate --strict --no-check-publish --working-dir examples

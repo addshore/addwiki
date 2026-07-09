@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Client\Auth;
 
 use Addwiki\Mediawiki\Api\Client\Request\Request;
@@ -14,6 +16,8 @@ use MediaWiki\OAuthClient\Token;
  * For use with https://www.mediawiki.org/wiki/Extension:Oauth
  */
 class OAuthOwnerConsumer implements AuthMethod {
+
+	use UserAgentSettings;
 
 	private string $consumerKey;
 
@@ -80,6 +84,9 @@ class OAuthOwnerConsumer implements AuthMethod {
 	}
 
 	public function identifierForUserAgent(): ?string {
+		if ( $this->getCustomUserAgentIdentifier() !== null ) {
+			return $this->getCustomUserAgentIdentifier();
+		}
 		return 'oauth-consumer/' . $this->getConsumerKey();
 	}
 

@@ -20,7 +20,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
           body: |
-            This is a release of the addwiki monorepo
-            You can find the release notes of individual packages in the RELEASENOTES.md of their repositories
+            This is a release of the unified addwiki package.
+            Install with: composer require addwiki/addwiki
           draft: false
           prerelease: false

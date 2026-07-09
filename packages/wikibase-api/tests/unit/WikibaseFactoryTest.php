@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Wikibase\Tests\Unit;
 
 use Addwiki\Mediawiki\Api\Client\Action\ActionApi;

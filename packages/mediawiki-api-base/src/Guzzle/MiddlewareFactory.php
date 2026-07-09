@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Guzzle;
 
 use GuzzleHttp\Exception\ConnectException;
@@ -85,7 +87,7 @@ class MiddlewareFactory implements LoggerAwareInterface {
 			}
 
 			if ( $response !== null ) {
-				$data = json_decode( $response->getBody(), true );
+				$data = json_decode( (string)$response->getBody(), true );
 
 				// Retry on server errors
 				if ( $response->getStatusCode() >= 500 ) {

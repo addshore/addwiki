@@ -1,0 +1,36 @@
+{
+    "name": "addwiki/examples",
+    "description": "Runnable examples for the unified addwiki/addwiki package",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "repositories": [
+        {
+            "type": "path",
+            "url": ".."
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "addwiki/addwiki": "dev-main",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "scripts": {
+        "test": [
+            "@php check.php",
+            "@php mediawiki-siteinfo.php",
+            "@php mediawiki-last-log.php",
+            "@php mediawiki-namespaces.php",
+            "@php mediawiki-category-members.php",
+            "@php mediawiki-random-pages.php",
+            "@php wikidata-search-earth.php",
+            "@php wikidata-query-one.php"
+        ]
+    },
+    "config": {
+        "audit": {
+            "block-insecure": false
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

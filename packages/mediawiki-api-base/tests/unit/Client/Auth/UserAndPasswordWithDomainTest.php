@@ -1,10 +1,16 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Tests\Unit\Client\Auth;
 
+use Addwiki\Mediawiki\Api\Client\Action\ActionApi;
+use Addwiki\Mediawiki\Api\Client\Action\Request\ActionRequest;
 use Addwiki\Mediawiki\Api\Client\Auth\UserAndPasswordWithDomain;
+use GuzzleHttp\ClientInterface;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @covers Mediawiki\Api\Client\Auth\UserAndPasswordWithDomain
@@ -63,6 +69,35 @@ class UserAndPasswordWithDomainTest extends TestCase {
 			[ new UserAndPasswordWithDomain( 'usera', 'passa' ), new UserAndPasswordWithDomain( 'DIFF', 'passa' ), false ],
 			[ new UserAndPasswordWithDomain( 'usera', 'passa' ), new UserAndPasswordWithDomain( 'usera', 'DIFF' ), false ],
 		];
+	}
+
+	/**
+	 * @return MockObject&ResponseInterface
+	 */
+	private function getMockResponse( $responseValue ) {
+		$mock = $this->createMock( ResponseInterface::class );
+		$mock
+			->method( 'getBody' )
+			->willReturn( \GuzzleHttp\Psr7\Utils::streamFor( json_encode( $responseValue ) ) );
+		return $mock;
+	}
+
+	public function testDomainIsSent(): void {
+		$client = $this->createMock( ClientInterface::class );
+		$client->expects( $this->once() )
+			->method( 'request' )
+			->with(
+				'POST',
+				$this->anything(),
+				$this->callback( static function ( $options ) {
+					return isset( $options['form_params']['lgdomain'] ) && $options['form_params']['lgdomain'] === 'mydomain';
+				} )
+			)
+			->willReturn( $this->getMockResponse( [ 'login' => [ 'result' => 'Success' ] ] ) );
+
+		$auth = new UserAndPasswordWithDomain( 'U1', 'P1', 'mydomain' );
+		$api = new ActionApi( '', $auth, $client );
+		$auth->preRequestAuth( ActionRequest::simpleGet( 'dummy' ), $api );
 	}
 
 }

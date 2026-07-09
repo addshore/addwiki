@@ -2,15 +2,22 @@
 #
 # Access via "http://localhost:8877"
 #   (or "http://$(docker-machine ip):8877" if using docker-machine)
-version: '3'
 
 services:
   mediawiki:
     build:
       context: .
       dockerfile: Dockerfile-ci
-    restart: always
-    entrypoint: /dc-scripts/docker-compose-ci-entrypoint.sh
+      args:
+        MEDIAWIKI_VERSION: ${MEDIAWIKI_VERSION:-1.39.8}
+        MEDIAWIKI_BRANCH: ${MEDIAWIKI_BRANCH:-REL1_39}
+    restart: "no"
+    healthcheck:
+      test: ["CMD", "curl", "--silent", "--show-error", "--fail", "http://127.0.0.1/"]
+      interval: 2s
+      timeout: 5s
+      retries: 60
+      start_period: 10s
     environment:
       MYSQL_SERVER: database
       MYSQL_DATABASE: my_wiki
@@ -25,8 +32,14 @@ services:
       - ./build:/dc-scripts
 
   database:
-    image: mariadb
+    image: mariadb:10.11
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD --database=$$MYSQL_DATABASE --silent --skip-column-names -e \"SELECT @@global.read_only = 0\" | grep -q 1"]
+      interval: 2s
+      timeout: 5s
+      retries: 120
+      start_period: 15s
     environment:
       # @see https://phabricator.wikimedia.org/source/mediawiki/browse/master/includes/DefaultSettings.php
       MYSQL_DATABASE: my_wiki

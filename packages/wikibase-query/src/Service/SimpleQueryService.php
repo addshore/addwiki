@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Wikibase\Query\Service;
 
 use Addwiki\Wikibase\Query\QueryBuilderFactory;

@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Client\Discovery;
 
 use Addwiki\Mediawiki\Api\Client\RsdException;
@@ -26,7 +28,7 @@ class ReallySimpleDiscovery {
 
 		// Set up HTTP client and HTML document.
 		$tempClient = new Client( [ 'headers' => [ 'User-Agent' => 'addwiki-mediawiki-client' ] ] );
-		$pageHtml = $tempClient->get( $pageUrl )->getBody();
+		$pageHtml = (string)$tempClient->get( $pageUrl )->getBody();
 		$pageDoc = new DOMDocument();
 
 		// Try to load the HTML (turn off errors temporarily; most don't matter, and if they do get
@@ -58,7 +60,7 @@ class ReallySimpleDiscovery {
 		$rsdUrl = $linkItem->attributes->getNamedItem( 'href' )->nodeValue;
 
 		// Then get the RSD XML, and return the API base url.
-		$rsdXml = new SimpleXMLElement( $tempClient->get( $rsdUrl )->getBody() );
+		$rsdXml = new SimpleXMLElement( (string)$tempClient->get( $rsdUrl )->getBody() );
 		$actionAPIUrl = (string)$rsdXml->service->apis->api->attributes()->apiLink;
 		return str_replace( 'api.php', '', $actionAPIUrl );
 	}

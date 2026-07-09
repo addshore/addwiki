@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Tests\Integration\Service;
 
 use Addwiki\Mediawiki\Api\MediawikiFactory;

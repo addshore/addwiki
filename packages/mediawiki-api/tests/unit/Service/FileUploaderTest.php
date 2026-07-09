@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Addwiki\Mediawiki\Api\Tests\Unit\Service;
 
 use Addwiki\Mediawiki\Api\Client\Action\ActionApi;

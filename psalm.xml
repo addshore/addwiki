@@ -10,7 +10,6 @@
         <directory name="packages/mediawiki-api-base/src" />
         <directory name="packages/mediawiki-api/src" />
         <directory name="packages/mediawiki-datamodel/src" />
-        <directory name="packages/mediawiki-flow-api/src" />
         <directory name="packages/mediawiki-sitematrix-api/src" />
         <directory name="packages/wikibase-api/src" />
         <directory name="packages/wikibase-query/src" />
