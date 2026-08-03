@@ -1,11 +1,14 @@
 # Release notes
 
-This repository now ships as a single Composer package: `addwiki/addwiki`.
+## v4.0.1
 
+Clean up `composer.json` by removing some unused packages and adding a normalization test.
 
 ## v4.0.0
 
 The start of the unified package release cycle.
+
+This repository now ships as a single Composer package: `addwiki/addwiki`.
 
 This release is fundamentally the same as the split packages release of v3.1.0, but within a single package.
 The split packages will no longer be maintained and will be archived.
