@@ -1,4 +1,65 @@
 {
+    "name": "addwiki/addwiki",
+    "description": "Unified PHP toolkit for MediaWiki, Wikibase and Wikimedia APIs",
+    "license": "GPL-2.0-or-later",
+    "type": "library",
+    "keywords": [
+        "Mediawiki"
+    ],
+    "authors": [
+        {
+            "name": "Addshore"
+        },
+        {
+            "name": "Sam Wilson"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "ext-curl": "*",
+        "benestar/asparagus": "^0.4",
+        "composer/semver": "^3.2",
+        "data-values/common": "~0.4.0",
+        "data-values/data-values": "^2.0",
+        "data-values/geo": "^4.0",
+        "data-values/interfaces": "~0.1.5 || ~0.2.0",
+        "data-values/number": "~0.10.0",
+        "data-values/serialization": "^1.0",
+        "data-values/time": "^1.0",
+        "guzzlehttp/guzzle": "^6.3 || ^7.0",
+        "guzzlehttp/promises": "^1.1 || ^2.0",
+        "linclark/microdata-php": "^2.0",
+        "mediawiki/oauthclient": "^2.1",
+        "psr/log": "^3.0",
+        "serialization/serialization": "^3.2 || ^4.0",
+        "wikibase/data-model": "^8.0 || ^9.2",
+        "wikibase/data-model-serialization": "^2.0",
+        "wikibase/data-model-services": "^4.0"
+    },
+    "require-dev": {
+        "data-values/validators": "~0.1.0",
+        "doctrine/instantiator": "^1.5",
+        "ergebnis/composer-normalize": "^2.52",
+        "mediawiki/mediawiki-codesniffer": "^38.0",
+        "php-parallel-lint/php-parallel-lint": "^1.2",
+        "phpunit/phpunit": "^9",
+        "rector/rector": "^0.11.60",
+        "vimeo/psalm": "^6.0"
+    },
+    "replace": {
+        "addwiki/mediawiki-api": "self.version",
+        "addwiki/mediawiki-api-base": "self.version",
+        "addwiki/mediawiki-datamodel": "self.version",
+        "addwiki/mediawiki-sitematrix-api": "self.version",
+        "addwiki/wikibase-api": "self.version",
+        "addwiki/wikibase-datamodel": "self.version",
+        "addwiki/wikibase-query": "self.version",
+        "addwiki/wikimedia": "self.version"
+    },
+    "suggest": {
+        "ext-dom": "Needed if you want to discover APIs using only page URLs",
+        "ext-simplexml": "Needed if you want to discover APIs using only page URLs"
+    },
     "autoload": {
         "psr-4": {
             "Addwiki\\Mediawiki\\Api\\": [
@@ -13,32 +74,6 @@
             "Addwiki\\Wikimedia\\": "packages/wikimedia/src/",
             "Wikibase\\MediaInfo\\": "packages/wikibase-datamodel/lib/wikibase/media-info/src/"
         }
-    },
-    "require": {
-        "benestar/asparagus": "~0.4",
-        "composer/semver": "^3.2",
-        "data-values/common": "~0.4.0",
-        "data-values/data-values": "~2.0",
-        "data-values/geo": "~4.0",
-        "data-values/interfaces": "~0.2.0||~0.1.5",
-        "data-values/number": "~0.10.0",
-        "data-values/serialization": "~1.0",
-        "data-values/time": "~1.0",
-        "ext-curl": "*",
-        "guzzlehttp/guzzle": "~6.3||~7.0",
-        "guzzlehttp/promises": "^1.1 || ^2.0",
-        "linclark/microdata-php": "~2.0",
-        "mediawiki/oauthclient": "^2.1",
-        "php": ">=8.1",
-        "psr/log": "~3.0",
-        "serialization/serialization": "~3.2||~4.0",
-        "wikibase/data-model": "~9.2||~8.0",
-        "wikibase/data-model-serialization": "~2.0",
-        "wikibase/data-model-services": "~4.0"
-    },
-    "suggest": {
-        "ext-dom": "Needed if you want to discover APIs using only page URLs",
-        "ext-simplexml": "Needed if you want to discover APIs using only page URLs"
     },
     "autoload-dev": {
         "psr-4": {
@@ -56,57 +91,29 @@
             "Addwiki\\Wikibase\\DataModel\\Tests\\Unit\\": "packages/wikibase-datamodel/tests/unit/"
         }
     },
-    "name": "addwiki/addwiki",
-    "replace": {
-        "addwiki/mediawiki-api": "self.version",
-        "addwiki/mediawiki-api-base": "self.version",
-        "addwiki/mediawiki-datamodel": "self.version",
-        "addwiki/mediawiki-sitematrix-api": "self.version",
-        "addwiki/wikibase-api": "self.version",
-        "addwiki/wikibase-datamodel": "self.version",
-        "addwiki/wikibase-query": "self.version",
-        "addwiki/wikimedia": "self.version"
-    },
-    "type": "library",
-    "description": "Unified PHP toolkit for MediaWiki, Wikibase and Wikimedia APIs",
-    "keywords": [
-        "Mediawiki"
-    ],
-    "license": "GPL-2.0-or-later",
-    "authors": [
-        {
-            "name": "Addshore"
-        },
-        {
-            "name": "Sam Wilson"
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true
         }
-    ],
-    "require-dev": {
-        "data-values/validators": "~0.1.0",
-        "doctrine/instantiator": "^1.5",
-        "mediawiki/mediawiki-codesniffer": "~38.0",
-        "php-parallel-lint/php-parallel-lint": "^1.2",
-        "phpunit/phpunit": "~9",
-        "rector/rector": "^0.11.60",
-        "vimeo/psalm": "^6.0"
     },
     "scripts": {
+        "aww": "aww",
+        "awwd": "echo Please run ./vendor/bin/awwd directly",
+        "fix": "vendor/bin/phpcbf --standard=phpcs.xml packages",
         "lint": "vendor/bin/parallel-lint packages --exclude vendor",
         "phpcs": "vendor/bin/phpcs -ps --runtime-set ignore_warnings_on_exit 1 --standard=phpcs.xml packages",
-        "strict-types": "vendor/bin/phpcs -ps --standard=phpcs.xml --sniffs=Generic.PHP.RequireStrictTypes .",
-        "fix": "vendor/bin/phpcbf --standard=phpcs.xml packages",
         "phpunit": "vendor/bin/phpunit packages/*/tests",
-        "phpunit-unit": "vendor/bin/phpunit packages/*/tests/unit",
         "phpunit-integration": "vendor/bin/phpunit packages/*/tests/integration",
+        "phpunit-unit": "vendor/bin/phpunit packages/*/tests/unit",
+        "psalm": "vendor/bin/psalm",
+        "rector": "vendor/bin/rector process --dry-run --ansi",
+        "strict-types": "vendor/bin/phpcs -ps --standard=phpcs.xml --sniffs=Generic.PHP.RequireStrictTypes .",
         "test": [
+            "composer normalize --dry-run",
             "@lint",
             "@strict-types",
             "@phpcs",
             "@phpunit-unit"
-        ],
-        "rector": "vendor/bin/rector process --dry-run --ansi",
-        "psalm": "vendor/bin/psalm",
-        "aww": "aww",
-        "awwd": "echo Please run ./vendor/bin/awwd directly"
+        ]
     }
 }
