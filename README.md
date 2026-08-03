@@ -1,10 +1,15 @@
-# addwiki
+# Addwiki
+
+[![Packagist](https://img.shields.io/packagist/v/addwiki/addwiki)](https://packagist.org/packages/addwiki/addwiki)
+[![Tests](https://github.com/addshore/addwiki/actions/workflows/composer_test.yaml/badge.svg)](https://github.com/addshore/addwiki/actions/workflows/composer_test.yaml)
 
 Addwiki is a unified PHP toolkit for interacting with MediaWiki, Wikibase, Wikimedia and related APIs.
 
-To get started quickly, run the local scripts in `examples/`.
+To get started quickly, examine and run the scripts in `examples/`.
 
-This repository is now the canonical source and distribution package.
+The different parts of Addwiki used to be separate packages,
+but `addwiki/addwiki` is now the canonical source and distribution package
+and should be used in preference to the older ones.
 
 Install with Composer:
 
@@ -22,46 +27,3 @@ Code is kept in internal package-style folders under `/packages` for separation 
 - `Addwiki\\Wikibase\\Api`
 - `Addwiki\\Wikibase\\Query`
 - `Addwiki\\Wikimedia`
-
-## Development
-
-Run examples from the `examples/` directory.
-
-### Testing & CI
-
-Run the default local test workflow (lint + phpcs + unit tests):
-
-```sh
-composer run test
-```
-
-Run lint only:
-
-```sh
-composer lint
-```
-
-Run static analysis separately:
-
-```sh
-composer psalm
-```
-
-Run phpunit tests on a single internal package:
-
-```sh
-vendor/bin/phpunit packages/mediawiki-api-base/tests/unit
-```
-
-Integration tests are facilitated by the `docker-compose-ci.yml` file.
-Run it before running integration tests.
-
-```sh
-docker compose -f docker-compose-ci.yml up -d --build
-```
-
-Wait for the wiki to be accessible, then run the tests:
-
-```sh
-composer phpunit-integration
-```
